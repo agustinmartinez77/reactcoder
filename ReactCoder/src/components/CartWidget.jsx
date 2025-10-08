@@ -1,12 +1,14 @@
 import { Link } from 'react-router-dom'
+import { useCart } from '../context/CartContext.jsx'
 
-export default function CartWidget({ count = 0 }) {
+export default function CartWidget() {
+  const { totalItems } = useCart()
   return (
     <Link to="/cart" className="btn btn-outline-primary position-relative">
       <span role="img" aria-label="carrito">🛒</span>
-      {count > 0 && (
+      {totalItems > 0 && (
         <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-          {count}
+          {totalItems}
         </span>
       )}
     </Link>
