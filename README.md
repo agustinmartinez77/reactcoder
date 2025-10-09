@@ -34,26 +34,3 @@ UX:
 loaders y estados vacíos: “Cargando…”, “No hay productos…”, “Producto no encontrado”, “Sin stock” si se alcanza el tope de 10.
 
 
-Estructura (resumen)
-src/
-  components/
-    NavBar.jsx
-    CartWidget.jsx
-    ItemListContainer.jsx
-    ItemList.jsx
-    ItemCard.jsx
-    ItemDetailContainer.jsx
-    ItemDetail.jsx
-    ItemCount.jsx
-    Cart.jsx
-    CartItem.jsx
-    CheckoutForm.jsx
-    NotFound.jsx
-  context/
-    CartContext.jsx        # useReducer + tope 10 por producto
-  services/
-    firebase.js            # init + fetchProducts/fetchProductById/createOrder
-App.jsx
-main.jsx
-
-
