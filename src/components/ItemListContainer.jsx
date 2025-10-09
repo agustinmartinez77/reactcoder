@@ -10,13 +10,13 @@ export default function ItemListContainer({ greeting = 'Catálogo' }) {
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    let mounted = true;
+    let alive = true;
     setLoading(true); setError(null);
     fetchProducts(categoryId)
-      .then(data => { if (mounted) setItems(data); })
-      .catch(e => { if (mounted) setError(String(e?.message || e)); })
-      .finally(() => { if (mounted) setLoading(false); });
-    return () => { mounted = false; };
+      .then(data => { if (alive) setItems(data); })
+      .catch(e => { if (alive) setError(String(e?.message || e)); })
+      .finally(() => { if (alive) setLoading(false); });
+    return () => { alive = false; };
   }, [categoryId]);
 
   return (
@@ -25,13 +25,10 @@ export default function ItemListContainer({ greeting = 'Catálogo' }) {
         <h1 style={{margin:0, fontSize:20}}>{greeting}</h1>
         {categoryId && <span className="badge">Filtro: {categoryId}</span>}
       </div>
+
       {loading && <p>Cargando productos…</p>}
       {error && <p style={{color:'crimson'}}>Error: {error}</p>}
-      {!loading && !error && (items?.length ? (
-        <ItemList items={items} />
-      ) : (
-        <p>No hay productos para mostrar.</p>
-      ))}
+      {!loading && !error && <ItemList items={items} />}
     </section>
   );
 }

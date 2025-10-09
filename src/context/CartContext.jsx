@@ -6,12 +6,22 @@ function reducer(state, action) {
   switch (action.type) {
     case 'ADD': {
       const { item, qty } = action.payload;
+      const MAX = 10;
+
       const existing = state.items.find(i => i.id === item.id);
+      const current = existing?.qty ?? 0;
+      const remaining = Math.max(0, MAX - current);
+      const toAdd = Math.min(Math.max(0, Number(qty || 0)), remaining);
+
+      if (toAdd <= 0) return state;
+
       let items;
       if (existing) {
-        items = state.items.map(i => i.id === item.id ? { ...i, qty: i.qty + qty } : i);
+        items = state.items.map(i =>
+          i.id === item.id ? { ...i, qty: i.qty + toAdd } : i
+        );
       } else {
-        items = [...state.items, { ...item, qty }];
+        items = [...state.items, { ...item, qty: toAdd }];
       }
       return { ...state, items };
     }
@@ -38,13 +48,18 @@ export function CartProvider({ children }) {
     [state.items]
   );
 
+  const getItemQuantity = (id) =>
+    state.items.find(i => i.id === id)?.qty ?? 0;
+
   const value = {
     items: state.items,
     totalItems,
     totalAmount,
+    getItemQuantity,                       
     addItem: (item, qty) => dispatch({ type: 'ADD', payload: { item, qty } }),
     removeItem: (id) => dispatch({ type: 'REMOVE', payload: id }),
     clear: () => dispatch({ type: 'CLEAR' }),
+    MAX_PER_PRODUCT: 10,                   
   };
 
   return <CartContext.Provider value={value}>{children}</CartContext.Provider>;

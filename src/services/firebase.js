@@ -21,13 +21,13 @@ export async function fetchProducts(categoryId) {
   const col = collection(db, 'products');
   const q = categoryId ? query(col, where('category', '==', categoryId)) : col;
   const snap = await getDocs(q);
-  return snap.docs.map(d => ({ id: d.id, ...d.data() }));
+  return snap.docs.map(d => ({ ...d.data(), id: d.id }));
 }
 
 export async function fetchProductById(id) {
   const ref = doc(db, 'products', id);
   const snap = await getDoc(ref);
-  return snap.exists() ? ({ id: snap.id, ...snap.data() }) : null;
+  return snap.exists() ? ({ ...snap.data(), id: snap.id }) : null;
 }
 
 export async function createOrder({ buyer, items, total }) {
