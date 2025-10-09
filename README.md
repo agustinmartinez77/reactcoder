@@ -1,12 +1,59 @@
-# React + Vite
+E-commerce React + Firebase (SPA)
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Front-end de un e-commerce construido como Single Page Application con React, React Router y Context API para el carrito. Los productos se leen desde Firestore y al confirmar la compra se genera una orden en la colección orders.
+Cumple con: listado/detalle, navegación SPA, contador con límite por stock, carrito con totales, checkout y orderId.
 
-Currently, two official plugins are available:
+Stack
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+Vite + React 18
+React Router v6
+Context API + useReducer (carrito)
+Firebase v10 – Firestore
 
-## Expanding the ESLint configuration
+Funcionalidades
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+Listado de productos (Home) dinámico desde Firestore.
+Filtro por categoría: rutas /category/:categoryId (consulta con where).
+Detalle de producto: ruta /item/:id (por docId real de Firestore).
+
+ItemCount con validaciones:
+mínimo 1
+máximo por “stock” 10 por producto en total (no permite superar 10 aunque entres/salgas de la PDP).
+tras “Agregar”, se oculta y aparecen CTAs “Ir al carrito / Seguir comprando”.
+
+Carrito (Context):
+guarda ítems y cantidades, permite quitar y vaciar,
+muestra subtotal por ítem y total general,
+CartWidget (icono) con total de unidades.
+
+Checkout:
+persiste una orden en orders (Firestorm) con detalles,
+muestra el id de la orden al usuario.
+
+UX:
+loaders y estados vacíos: “Cargando…”, “No hay productos…”, “Producto no encontrado”, “Sin stock” si se alcanza el tope de 10.
+
+
+Estructura (resumen)
+src/
+  components/
+    NavBar.jsx
+    CartWidget.jsx
+    ItemListContainer.jsx
+    ItemList.jsx
+    ItemCard.jsx
+    ItemDetailContainer.jsx
+    ItemDetail.jsx
+    ItemCount.jsx
+    Cart.jsx
+    CartItem.jsx
+    CheckoutForm.jsx
+    NotFound.jsx
+  context/
+    CartContext.jsx        # useReducer + tope 10 por producto
+  services/
+    firebase.js            # init + fetchProducts/fetchProductById/createOrder
+App.jsx
+main.jsx
+
+
